@@ -46,5 +46,12 @@ Projects consumed or noteworthy:
 * https://github.com/tomduncalf/ubermap
 * http://motscousus.com/stuff/2011-07_Novation_Launchpad_Ableton_Live_Scripts/#toc
 
-Ableton log location (Mac OS X):
-* Machintosh HD ▸ Users ▸ jim ▸ Library ▸ Preferences ▸ Ableton ▸ Live 9.1.6
+Ableton log & Options.txt location (Mac OS X):
+* <drive> ▸ Users ▸ <user name> ▸ Library ▸ Preferences ▸ Ableton ▸ Live 9.1.6
+
+Remote Scripts Location:
+* <drive> ▸ Applications ▸ Ableton Live 9 Suite.app ▸ Contents ▸ App-Resources ▸ MIDI Remote Scripts
+
+User Remote Scripts Location (& instructions):
+* <drive> ▸ Users ▸ <user name> ▸ Library ▸ Preferences ▸ Ableton ▸ Live 9.1.6 ▸ User Remote Scripts
+
