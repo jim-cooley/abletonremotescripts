@@ -3,6 +3,9 @@ import Live
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.ButtonElement import ButtonElement
 
+from logly import *
+
+
 class ViewTogglerComponent(ControlSurfaceComponent):
     """ Component that can toggle the device chain- and clip view of a number of tracks """
 
@@ -54,9 +57,11 @@ class ViewTogglerComponent(ControlSurfaceComponent):
         return
 
     def on_selected_track_changed(self):
+        logly_message("VCM: View got track selection change")
         self._update_buttons()
 
     def on_enabled_changed(self):
+        logly_message("VCM: View got enabled changed")
         self.update()
 
     def update(self):

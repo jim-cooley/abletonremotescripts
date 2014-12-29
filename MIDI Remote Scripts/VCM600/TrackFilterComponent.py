@@ -47,10 +47,12 @@ class TrackFilterComponent(ControlSurfaceComponent):
         return
 
     def on_enabled_changed(self):
+        logly_message("VCM: Filter got enabled changed")
         self.update()
 
     def set_track(self, track):
         assert (track == None or isinstance(track, Live.Track.Track))
+        logly_message("VCM: Filter got track change")
         if self._track is not None:
             self._track.remove_devices_listener(self._on_devices_changed)
             if self._device is not None:
@@ -94,7 +96,7 @@ class TrackFilterComponent(ControlSurfaceComponent):
         if self._track is not None:
             for index in range(len(self._track.devices)):
                 device = self._track.devices[-1 * (index + 1)]
-                logly_message("VCM: Looking for Filter: " + device.class_name)
+                logly_message("VCM: Filter found " + device.class_name)
                 if device.class_name in FILTER_DEVICES.keys():
                     self._device = device
                     break

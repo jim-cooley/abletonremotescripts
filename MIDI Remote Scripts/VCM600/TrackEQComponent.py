@@ -53,11 +53,12 @@ class TrackEQComponent(ControlSurfaceComponent):
         return
 
     def on_enabled_changed(self):
+        logly_message("VCM: EQ got enabled changed")
         self.update()
 
     def set_track(self, track):
         assert (track is None) or isinstance(track, Live.Track.Track)
-        logly_message("VCM: got track change")
+        logly_message("VCM: EQ got track change")
         if self._track is not None:
             self._track.remove_devices_listener(self._on_devices_changed)
             if (self._gain_controls is not None) and (self._device is not None):
@@ -142,7 +143,7 @@ class TrackEQComponent(ControlSurfaceComponent):
         return
 
     def _on_devices_changed(self):
-        logly_message("VCM: got device change")
+        logly_message("VCM: EQ got device change")
         if self._device is not None:
             device_dict = EQ_DEVICES[self._device.class_name]
             if 'Cuts' in device_dict.keys():
@@ -156,7 +157,7 @@ class TrackEQComponent(ControlSurfaceComponent):
         if self._track is not None:
             for index in range(len(self._track.devices)):
                 device = self._track.devices[-1 * (index + 1)]
-                logly_message("VCM: Looking for EQ: " + device.class_name)
+                logly_message("VCM: EQ found " + device.class_name)
                 if device.class_name in EQ_DEVICES.keys():
                     self._device = device
                     break

@@ -3,6 +3,10 @@ from _Framework.MixerComponent import MixerComponent as MixerComponentBase
 from .TrackEQComponent import TrackEQComponent
 from .TrackFilterComponent import TrackFilterComponent
 
+from logly import *
+from utils import *
+
+
 class MixerComponent(MixerComponentBase):
 
     def __init__(self, num_tracks, *a, **k):
@@ -31,3 +35,9 @@ class MixerComponent(MixerComponentBase):
             if len(self._track_filters) > index:
                 self._track_filters[index].set_track(track)
         return
+
+    def on_selected_track_changed(self):
+        logly_message("VCM: Mixer received selected track change.")
+        selected_track = self.song().view.selected_track
+        print_track_info(selected_track)
+        MixerComponentBase.on_selected_track_changed(self)
