@@ -17,7 +17,7 @@ from _Framework.ChannelTranslationSelector import ChannelTranslationSelector
 from consts import *
 from ViewTogglerComponent import ViewTogglerComponent
 from MixerComponent import MixerComponent
-from log import Logger
+from logly import *
 
 
 class VCM600(ControlSurface):
@@ -31,8 +31,8 @@ class VCM600(ControlSurface):
             self._setup_device_control()
             self._setup_transport_control()
             self._setup_view_control()
-        Logger.set_logger(self)
-        Logger.log_message("VCM600 loaded.")
+        logly_set_logger(self)
+        logly_message("VCM600 loaded.")
 
     def _setup_session_control(self):
             is_momentary = True

@@ -5,12 +5,13 @@ from _Framework.EncoderElement import EncoderElement
 from _Generic.Devices import get_parameter_by_name
 
 from consts import *
-from log import Logger
+from logly import *
+from utils import *
 
 
-EQ_DEVICES = {'Eq8': {'Gains': [ '%i Gain A' % (index + 1) for index in range(8) ]},
- 'FilterEQ3': {'Gains': ['GainLo', 'GainMid', 'GainHi'],
-               'Cuts': ['LowOn', 'MidOn', 'HighOn']}}
+EQ_DEVICES = {'Eq8':        {'Gains': [ '%i Gain A' % (index + 1) for index in range(8) ]},
+             'FilterEQ3':   {'Gains': ['GainLo', 'GainMid', 'GainHi'],
+                             'Cuts':  ['LowOn', 'MidOn', 'HighOn']}}
 
 
 class TrackEQComponent(ControlSurfaceComponent):
@@ -56,7 +57,7 @@ class TrackEQComponent(ControlSurfaceComponent):
 
     def set_track(self, track):
         assert (track is None) or isinstance(track, Live.Track.Track)
-        Logger.log_message("VCM: got track change")
+        logly_message("VCM: got track change")
         if self._track is not None:
             self._track.remove_devices_listener(self._on_devices_changed)
             if (self._gain_controls is not None) and (self._device is not None):
@@ -64,6 +65,7 @@ class TrackEQComponent(ControlSurfaceComponent):
                     control.release_parameter()
         self._track = track
         if self._track is not None:
+            print_track_info(self._track)
             self._track.add_devices_listener(self._on_devices_changed)
             self._on_devices_changed()
         return
@@ -140,7 +142,7 @@ class TrackEQComponent(ControlSurfaceComponent):
         return
 
     def _on_devices_changed(self):
-        Logger.log_message("VCM: got device change")
+        logly_message("VCM: got device change")
         if self._device is not None:
             device_dict = EQ_DEVICES[self._device.class_name]
             if 'Cuts' in device_dict.keys():
@@ -154,7 +156,7 @@ class TrackEQComponent(ControlSurfaceComponent):
         if self._track is not None:
             for index in range(len(self._track.devices)):
                 device = self._track.devices[-1 * (index + 1)]
-                Logger.log_message("VCM: Looking for EQ: " + device.class_name)
+                logly_message("VCM: Looking for EQ: " + device.class_name)
                 if device.class_name in EQ_DEVICES.keys():
                     self._device = device
                     break

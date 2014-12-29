@@ -5,7 +5,7 @@ from _Framework.EncoderElement import EncoderElement
 from _Generic.Devices import get_parameter_by_name
 
 from consts import *
-from log import Logger
+from logly import *
 
 
 FILTER_DEVICES = {'AutoFilter': {'Frequency': 'Frequency',
@@ -94,7 +94,7 @@ class TrackFilterComponent(ControlSurfaceComponent):
         if self._track is not None:
             for index in range(len(self._track.devices)):
                 device = self._track.devices[-1 * (index + 1)]
-                Logger.log_message("VCM: Looking for Filter: " + device.class_name)
+                logly_message("VCM: Looking for Filter: " + device.class_name)
                 if device.class_name in FILTER_DEVICES.keys():
                     self._device = device
                     break
