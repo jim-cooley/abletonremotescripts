@@ -1,0 +1,13 @@
+-ShowDeviceSlots
+-EnableMapToSiblings
+-AutoAdjustMacroMappingRange
+-_PluginAutoPopulateThreshold=-1
+-NoVstStartupScan
+-ThinningAggressiveness=0.6
+-ReWireMasterOff
+-ReWireChannels=32
+-NoAutoArming
+-EnableArmOnSelection
+
+
+
