@@ -45,3 +45,6 @@ Projects consumed or noteworthy:
 * https://github.com/wiffbi/Selected_Track_Control
 * https://github.com/tomduncalf/ubermap
 * http://motscousus.com/stuff/2011-07_Novation_Launchpad_Ableton_Live_Scripts/#toc
+
+Ableton log location (Mac OS X):
+* Machintosh HD ▸ Users ▸ jim ▸ Library ▸ Preferences ▸ Ableton ▸ Live 9.1.6
