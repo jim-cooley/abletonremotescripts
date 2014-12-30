@@ -91,6 +91,16 @@ class VCM600_XL(ControlSurface):
         self._device_parameter_encoders = ButtonMatrixElement(rows=[chain([ make_encoder(DEVICE_PARAM_ROW_1 + i, 'Device_Parameter_%d' % (i + 1)) for i in xrange(NUM_TRACKS)], [ make_encoder(DEVICE_PARAM_ROW_2 + i, 'Device_Parameter_%d' % (i + 1)) for i in xrange(NUM_TRACKS) ])])
         self._device_parameter_buttons = ButtonMatrixElement(rows=[chain([ make_button(DEVICE_BUTTON_ROW_1 + i, 'Device_Button_%d' % (i + 1)) for i in xrange(NUM_TRACKS)], [ make_encoder(DEVICE_BUTTON_ROW_2 + i, 'Device_Button_%d' % (i + 1)) for i in xrange(NUM_TRACKS) ])])
 
+        # lower row of device parameter encoders & buttons (not sure how to do these)
+
+        # Master/Return Control:
+
+        # Transport Control:
+
+        # Mode buttons:
+
+
+
 #       self._pan_device_mode_button = make_button(105, 'Pan_Device_Mode', MIDI_NOTE_TYPE)
 
         self._mute_mode_button = make_button(106, 'Mute_Mode', MIDI_NOTE_TYPE)
