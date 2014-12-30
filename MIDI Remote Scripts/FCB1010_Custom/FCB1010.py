@@ -27,7 +27,7 @@ class FCB1010:
 	    self.log("fcb1010")
 
 	self.c_instance = c_instance
-	self.main_controller = FCB1010MainController(self)
+	self.main_controller = FCB1010MainController(self)f
 	self.track_controller = FCB1010TrackController(self)
 	self.components = [self.main_controller,  self.track_controller]
 #	self.components = [self.main_controller]

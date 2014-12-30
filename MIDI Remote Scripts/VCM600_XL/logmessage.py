@@ -4,14 +4,17 @@
 #
 from _Framework.ControlSurface import ControlSurface
 
-
 _logger = None
 
 
-def logly_message(message):
+def log_message(message):
 	if _logger is not None and isinstance(_logger, ControlSurface):
 		_logger.log_message(message)
 
-def logly_set_logger(facility):
+def show_message(message):
+	if _logger is not None and isinstance(_logger, ControlSurface):
+		_logger.show_message(message)
+
+def log_set_logger(facility):
 	global _logger
-	logly_logger = facility
+	_logger = facility

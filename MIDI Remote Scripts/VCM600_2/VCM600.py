@@ -16,7 +16,7 @@ from _Framework.ChannelTranslationSelector import ChannelTranslationSelector
 
 from consts import *
 from ViewTogglerComponent import ViewTogglerComponent
-from MixerComponent import MixerComponent
+from MixerComponent import SpecialMixerComponent
 from logly import *
 
 
@@ -25,14 +25,39 @@ class VCM600(ControlSurface):
 
     def __init__(self, c_instance):
         ControlSurface.__init__(self, c_instance)
+        self._set_suppress_rebuild_requests(True)
         with self.component_guard():
             self._setup_session_control()
             self._setup_mixer_control()
             self._setup_device_control()
             self._setup_transport_control()
             self._setup_view_control()
+        self._set_suppress_rebuild_requests(False)
         logly_set_logger(self)
         logly_message("VCM600 loaded.")
+
+# General Operation:
+
+    def _on_selected_track_changed(self):
+        ControlSurface._on_selected_track_changed(self)
+        track = self.song().view.selected_track
+        device_to_select = track.view.selected_device
+        if device_to_select == None and len(track.devices) > 0:
+            device_to_select = track.devices[0]
+        if device_to_select != None:
+            self.song().view.select_device(device_to_select)
+        self._device_component.set_device(device_to_select)
+        return None
+
+    # this method is called by Live when it needs to disconnect.  It's very important that any observers that were set up in the script are removed here
+    def disconnect(self):
+#        if self.song().view.selected_track_has_listener(self._update_selected_device):
+#            self.song().view.remove_selected_track_listener(self._update_selected_device)
+        logly_message("VCM: disconnected.")
+        ControlSurface.disconnect(self)
+        return None
+
+# Component setup:
 
     def _setup_session_control(self):
             is_momentary = True
@@ -48,7 +73,7 @@ class VCM600(ControlSurface):
 
     def _setup_mixer_control(self):
         is_momentary = True
-        mixer = MixerComponent(NUM_TRACKS, NUM_RETURNS)
+        mixer = SpecialMixerComponent(NUM_TRACKS, NUM_RETURNS)
         for track in range(NUM_TRACKS):
             strip = mixer.channel_strip(track)
             strip.set_volume_control(SliderElement(MIDI_CC_TYPE, track, TRACK_VOLUME))
@@ -106,9 +131,8 @@ class VCM600(ControlSurface):
         view = ViewTogglerComponent(NUM_TRACKS)
         view.set_buttons(tuple([ ButtonElement(is_momentary, MIDI_NOTE_TYPE, track, TRACK_VIEW_DEVICE) for track in range(NUM_TRACKS) ]), tuple([ ButtonElement(is_momentary, MIDI_NOTE_TYPE, track, TRACK_VIEW_CLIP) for track in range(NUM_TRACKS) ]))
 
+# Misc Methods:
+
+    # this method needs to be here so that Live knows what to do (nothing, in this case) when it receives sysex from the CNTRLR
     def handle_sysex(self, midi_bytes):
-        self._suppress_send_midi = False
-        self._suppress_session_highlight = False
-        self.set_enabled(True)
-#       self._on_selected_track_changed()
-#       self._do_combine()
+        pass

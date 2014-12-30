@@ -15,6 +15,7 @@ The best sources I've found for information on programming Ableton Live (tm) Rem
 * http://remotescripts.blogspot.com/2010_03_01_archive.html
 * https://www.assembla.com/wiki/show/live-api
 * http://createdigitalmusic.com/2009/07/ableton-live-midi-remote-scripting-how-to-custom-korg-nanoseries-control/
+* http://www.aumhaa.com/wiki/index.php?title=Main_Page
 
 On Ableton/Blogs:
 * https://www.ableton.com/en/manual/midi-and-key-remote-control/
@@ -45,6 +46,7 @@ Projects consumed or noteworthy:
 * https://github.com/wiffbi/Selected_Track_Control
 * https://github.com/tomduncalf/ubermap
 * http://motscousus.com/stuff/2011-07_Novation_Launchpad_Ableton_Live_Scripts/#toc
+* https://github.com/aumhaa/monomodular
 
 Ableton log & Options.txt location (Mac OS X):
 * <drive> ▸ Users ▸ <user name> ▸ Library ▸ Preferences ▸ Ableton ▸ Live 9.1.6
