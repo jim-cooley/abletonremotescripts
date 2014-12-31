@@ -48,6 +48,7 @@ TRACK_CF_ASSIGN = 65	# Assign track to Cross Fader
 
 TRACK_VIEW_CLIP = 66
 TRACK_VIEW_DEVICE = 67
+TRACK_SELECT = TRACK_VIEW_DEVICE
 
 # Return Definitions: (for Return A)
 RETURN_PAN = 20

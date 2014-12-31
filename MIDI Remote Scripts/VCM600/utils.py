@@ -13,7 +13,7 @@ def print_track_info(track):
         logly_message("Type: %s %s %s" % ("Audio" if track.has_audio_input else "MIDI", "Group" if track.is_foldable else "", "Master/Send" if is_master_track(track) else ""))
         logly_message("Muted: %s" %  track.mute)
         if not is_master_track(track):
-            logly_message("Status: %s" %  "Solo" if track.solo else "Playing" + track.playing_slot_index if track.playing_slot_index >= 0 else "Stopped")
+            logly_message("Status: %s" %  "Solo" if track.solo else "Playing %d" % track.playing_slot_index if track.playing_slot_index >= 0 else "Stopped")
         logly_message("Visible: %s" % track.is_visible)
         logly_message("Selected: %s" % track.is_part_of_selection)
         logly_message("Clip Slots: %d" % len(track.clip_slots))

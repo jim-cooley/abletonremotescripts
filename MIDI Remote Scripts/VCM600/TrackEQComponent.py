@@ -9,9 +9,11 @@ from logly import *
 from utils import *
 
 
-EQ_DEVICES = {'Eq8':        {'Gains': [ '%i Gain A' % (index + 1) for index in range(8) ]},
-             'FilterEQ3':   {'Gains': ['GainLo', 'GainMid', 'GainHi'],
-                             'Cuts':  ['LowOn', 'MidOn', 'HighOn']}}
+EQ_DEVICES = {'Eq8': {'Gains': [ '%i Gain A' % (index + 1) for index in range(8) ]},
+              'FilterDelay': {'Gains': ['GainLo', 'GainMid', 'GainHi'],
+                              'Cuts': ['LowOn', 'MidOn', 'HighOn']},
+              'FilterEQ3': {'Gains': ['1 Volume', '2 Volume', '3 Volume'],
+                            'Cuts': ['1 Filter On', '2 Filter On', '3 Filter On']}}
 
 
 class TrackEQComponent(ControlSurfaceComponent):
@@ -59,6 +61,7 @@ class TrackEQComponent(ControlSurfaceComponent):
     def set_track(self, track):
         assert (track is None) or isinstance(track, Live.Track.Track)
         logly_message("VCM: EQ got track change")
+        logly_message("%s" % EQ_DEVICES)
         if self._track is not None:
             self._track.remove_devices_listener(self._on_devices_changed)
             if (self._gain_controls is not None) and (self._device is not None):
@@ -96,15 +99,23 @@ class TrackEQComponent(ControlSurfaceComponent):
 
     def update(self):
         super(TrackEQComponent, self).update()
+        logly_message("VCM: EQ update called.")
+        logly_message("VCM: EQ update called: %s, device is %s" % (self.is_enabled(), "None" if self._device is None else "not None"))able
         if self.is_enabled() and self._device is not None:
             device_dict = EQ_DEVICES[self._device.class_name]
+            logly_message("VCM: EQ updating device: %s" % self._device.class_name)
+            logly_message("VCM: EQ gain controls: %s" % "None" if self._gain_controls is None else len(self._gain_controls))
             if self._gain_controls is not None:
                 gain_names = device_dict['Gains']
+                logly_message("VCM: EQ gains: %s" % gain_names)
                 for index in range(len(self._gain_controls)):
                     self._gain_controls[index].release_parameter()
                     if len(gain_names) > index:
+                        logly_message("VCM: EQ looking for gain: %s" % gain_names[index])
                         parameter = get_parameter_by_name(self._device, gain_names[index])
+                        logly_message("VCM: EQ parameter: %s %s" % (gain_names[index], "Not Found" if parameter is None else "Found"))
                         if parameter is not None:
+                            logly_message("VCM: EQ connecting '%s' knob to %s" % (gain_names[index], parameter.original_name))
                             self._gain_controls[index].connect_to(parameter)
 
             if self._cut_buttons is not None and 'Cuts' in device_dict.keys():
@@ -115,7 +126,9 @@ class TrackEQComponent(ControlSurfaceComponent):
                         parameter = get_parameter_by_name(self._device, cut_names[index])
                         if parameter is not None:
                             if parameter.value == 0.0: self._cut_buttons[index].turn_on()
-                            if not parameter.value_has_listener(self._on_cut_changed):  parameter.add_value_listener(self._on_cut_changed)
+                            if not parameter.value_has_listener(self._on_cut_changed):
+                                logly_message("VCM: EQ connecting '%s' button to %s" % (cut_names[index], parameter.original_name))
+                                parameter.add_value_listener(self._on_cut_changed)
 
         else:
             if self._cut_buttons is not None:
@@ -144,7 +157,8 @@ class TrackEQComponent(ControlSurfaceComponent):
 
     def _on_devices_changed(self):
         logly_message("VCM: EQ got device change")
-        if self._device is not None:
+        logly_message("%s" % EQ_DEVICES)
+        if self.is_enabled() and self._device is not None:
             device_dict = EQ_DEVICES[self._device.class_name]
             if 'Cuts' in device_dict.keys():
                 cut_names = device_dict['Cuts']
@@ -161,7 +175,6 @@ class TrackEQComponent(ControlSurfaceComponent):
                 if device.class_name in EQ_DEVICES.keys():
                     self._device = device
                     break
-
         self.update()
         return
 

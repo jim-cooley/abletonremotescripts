@@ -6,6 +6,8 @@ Various Ableton Remote Scripts for 9.1+
 I've collected these from various places and made an attempt to give proper credit, but sometimes when finding things at 2am, you wind up forgetting where it came from.  If you see something that's yours, feel free to drop me a line at jim.cooley@live.com (no relation to ableton).
 
 The best sources I've found for information on programming Ableton Live (tm) Remote Scripts are the following:
+* https://cycling74.com/docs/max5/refpages/m4l-ref/m4l_live_object_model.html
+* https://cycling74.com/docs/max5/refpages/m4l-ref/m4l_live_api_overview.html
 * http://www.djtechtools.com/2014/07/06/the-basics-of-ableton-live-midi-controller-scripts-auto-mapping/
 * http://julienbayle.net/ableton-live-9-midi-remote-scripts/
 * http://julienbayle.net/PythonLiveAPI_documentation/Live9.1.4.xml

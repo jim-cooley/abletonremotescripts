@@ -14,4 +14,4 @@ def logly_message(message):
 
 def logly_set_logger(facility):
 	global _logger
-	logly_logger = facility
+	_logger = facility

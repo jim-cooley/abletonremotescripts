@@ -9,17 +9,27 @@ from logly import *
 
 
 FILTER_DEVICES = {'AutoFilter': {'Frequency': 'Frequency',
-                'Resonance': 'Resonance'},
- 'Operator': {'Frequency': 'Filter Freq',
-              'Resonance': 'Filter Res'},
- 'OriginalSimpler': {'Frequency': 'Filter Freq',
-                     'Resonance': 'Filter Res'},
- 'MultiSampler': {'Frequency': 'Filter Freq',
-                  'Resonance': 'Filter Res'},
- 'UltraAnalog': {'Frequency': 'F1 Freq',
-                 'Resonance': 'F1 Resonance'},
- 'StringStudio': {'Frequency': 'Filter Freq',
-                  'Resonance': 'Filter Reso'}}
+                                 'Resonance': 'Resonance'},
+                  'Chorus': {'Frequency': 'Feedback',
+                             'Resonance': 'Dry/Wet'},
+                  'CrossDelay': {'Frequency': 'Feedback',
+                                 'Resonance': 'Dry/Wet'},
+                  'FilterDelay': {'Frequency': '2 Filter Freq',
+                                  'Resonance': 'Dry'},
+                  'Operator': {'Frequency': 'Filter Freq',
+                               'Resonance': 'Filter Res'},
+                  'OriginalSimpler': {'Frequency': 'Filter Freq',
+                                      'Resonance': 'Filter Res'},
+                  'PingPongDelay': {'Frequency': 'Feedback',
+                                    'Resonance': 'Dry/Wet'},
+                  'MultiSampler': {'Frequency': 'Filter Freq',
+                                   'Resonance': 'Filter Res'},
+                  'Reverb': {'Frequency': 'DecayTime',
+                             'Resonance': 'Dry/Wet'},
+                  'UltraAnalog': {'Frequency': 'F1 Freq',
+                                  'Resonance': 'F1 Resonance'},
+                  'StringStudio': {'Frequency': 'Filter Freq',
+                                   'Resonance': 'Filter Reso'}}
 
 
 class TrackFilterComponent(ControlSurfaceComponent):
@@ -53,15 +63,16 @@ class TrackFilterComponent(ControlSurfaceComponent):
     def set_track(self, track):
         assert (track == None or isinstance(track, Live.Track.Track))
         logly_message("VCM: Filter got track change")
+        logly_message("%s" % FILTER_DEVICES)
         if self._track is not None:
             self._track.remove_devices_listener(self._on_devices_changed)
             if self._device is not None:
                 if self._freq_control is not None: self._freq_control.release_parameter()
                 if self._reso_control is not None: self._reso_control.release_parameter()
-            self._track = track
-            if self._track is not None:
-                self._track.add_devices_listener(self._on_devices_changed)
-                self._on_devices_changed()
+        self._track = track
+        if self._track is not None:
+            self._track.add_devices_listener(self._on_devices_changed)
+            self._on_devices_changed()
         return
 
     def set_filter_controls(self, freq, reso):
@@ -77,21 +88,27 @@ class TrackFilterComponent(ControlSurfaceComponent):
 
     def update(self):
         super(TrackFilterComponent, self).update()
+        logly_message("VCM: Filter update called.")
         if self.is_enabled() and self._device is not None:
+            logly_message("VCM: Filter updating device: %s" % self._device.class_name)
             device_dict = FILTER_DEVICES[self._device.class_name]
             if self._freq_control is not None:
                 self._freq_control.release_parameter()
                 parameter = get_parameter_by_name(self._device, device_dict['Frequency'])
                 if parameter is not None:
+                    logly_message("VCM: Filter connecting 'Frequency' knob to %s" % parameter.original_name)
                     self._freq_control.connect_to(parameter)
             if self._reso_control is not None:
                 self._reso_control.release_parameter()
                 parameter = get_parameter_by_name(self._device, device_dict['Resonance'])
                 if parameter is not None:
+                    logly_message("VCM: Filter connecting 'Resonance' knob to %s" % parameter.original_name)
                     self._reso_control.connect_to(parameter)
         return
 
     def _on_devices_changed(self):
+        logly_message("VCM: Filter got on device changed")
+        logly_message("%s" % FILTER_DEVICES)
         self._device = None
         if self._track is not None:
             for index in range(len(self._track.devices)):
