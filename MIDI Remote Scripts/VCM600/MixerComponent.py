@@ -25,7 +25,15 @@ class MixerComponent(MixerComponentBase):
         return self._track_filters[index]
 
     def _reassign_tracks(self):
+        logly_message("VCM: Mixer received reassign tracks.")
+        for index in range(len(self._channel_strips)):
+            if len(self._track_eqs) > index:
+                self._track_eqs[index].set_track(None)
+            if len(self._track_filters) > index:
+                self._track_filters[index].set_track(None)
+
         super(MixerComponent, self)._reassign_tracks()
+
         tracks = self.tracks_to_use()
         for index in range(len(self._channel_strips)):
             track_index = self._track_offset + index

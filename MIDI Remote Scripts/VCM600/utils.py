@@ -51,3 +51,20 @@ def print_device_info(device):
                     logly_message("Parameter: %s[%s] = %s" % (j.name, j.original_name, j.value))
     else:
         logly_message("Device: None")
+
+def enumerate_track_devices(self, track, expand_rack_devices=False):
+    devices = []
+    if hasattr(track, 'devices'):
+        for device in track.devices:
+            devices.append(device)
+            if expand_rack_devices and device.can_have_chains:
+                for chain in device.chains:
+                    for chain_device in self.enumerate_track_device(chain, expand_rack_devices):
+                        devices.append(chain_device)
+    return devices
+
+def get_parameter_by_name(device, name):
+    """ Find the given device's parameter that belongs to the given name """
+    for i in device.parameters:
+        if i.original_name == name:
+            return i
