@@ -1,0 +1,5 @@
+# set the default behavior:
+* text=auto
+
+# set extension-specific defaults:
+*.py eol=lf
