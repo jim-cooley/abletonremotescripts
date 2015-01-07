@@ -319,27 +319,40 @@ GRP1_BANK1 = ('Macro 1', 'Macro 2', 'Macro 3', 'Macro 4', 'Macro 5', 'Macro 6', 
 GRP1_BANKS = (GRP1_BANK1,)
 GRP1_MAP = {'Frequency': ('Macro 4',),
             'Gains': ('Macro 1', 'Macro 2', 'Macro 3'),
+            'Resonance': ('Macro 5', 'Macro 6'),    # amount, decay - might swap these?
+            'DryWet': ('Macro 7',),
             'Banks': GRP1_BANKS}
 
 #             Bass Gain, Mid Gain, Hi Gain, Mid Freq, Comp Gain/Attack, Comp Thresh, Comp Dry/Wet, Lim Gain/Sat Drive
 GRP2_BANK1 = ('Macro 1', 'Macro 2', 'Macro 4', 'Macro 3', 'Macro 6', 'Macro 5', 'Macro 7', 'Macro 8')
-GRP2_BANKS = (GRP2_BANK1,)
+GRP2_BANK2 = ('Macro 1', 'Macro 2', 'Macro 4', 'Macro 3', 'Macro 5', 'Macro 6', 'Macro 7', 'Macro 8')
+GRP2_BANKS = (GRP2_BANK1, GRP2_BANK2,)
 GRP2_MAP = {'Frequency': ('Macro 3',),
-               'Gains': ('Macro 1', 'Macro 2', 'Macro 4'),
-               'Banks': GRP2_BANKS}
+            'Gains': ('Macro 1', 'Macro 2', 'Macro 4', 'Macro 6', 'Macro 8'),
+            'Compressor': ('Macro 6', 'Macro 5', 'Macro 7'),
+            'Limiter': ('Macro 8',),
+            'DryWet': ('Macro 7',),
+            'Banks': GRP2_BANKS}
 
+#
 GRP3_BANK1 = ('Macro 1', 'Macro 2', 'Macro 3', 'Macro 6', 'Macro 4', 'Macro 5', 'Macro 7', 'Macro 8')
-GRP3_BANKS = (GRP3_BANK1,)
-GRP3_MAP = {'Frequency': ('Macro 3',),
-            'Gains': ('Macro 1', 'Macro 2', 'Macro 4'),
+GRP3_BANK2 = ('Macro 1', 'Macro 2', 'Macro 3', 'Macro 8', 'Macro 4', 'Macro 5', 'Macro 7', 'Macro 6')
+GRP3_BANKS = (GRP3_BANK1, GRP3_BANK2,)
+GRP3_MAP = {'Frequency': ('Macro 4','Macro 5'),
+            'Gains': ('Macro 1', 'Macro 2', 'Macro 3'),
+            'DryWet': ('Macro 7',),
+            'Volume': ('Macro 8',), # rack volume
             'Banks': GRP3_BANKS}
 
 #             Satur Drive, Sat Color, Sat Amount, Lim Gain, Comp SC Freq, Comp Thresh, Comp Gain, Comp Dry/Wet
 GRP4_BANK1 = ('Macro 1', 'Macro 2', 'Macro 3', 'Macro 8', 'Macro 4', 'Macro 5', 'Macro 6', 'Macro 7')
-GRP4_BANKS = (GRP4_BANK1,)
+GRP4_BANK2 = ('Macro 1', 'Macro 3', 'Macro 6', 'Macro 8', 'Macro 2', 'Macro 4', 'Macro 5', 'Macro 7')
+GRP4_BANKS = (GRP4_BANK1, GRP4_BANK2,)
 GRP4_MAP = {'Frequency': ('Macro 4',),
-            'Gains': ('Macro 3', 'Macro 8', 'Macro 6'),
+            'Gains': ('Macro 1', 'Macro 3', 'Macro 6', 'Macro 8'), # sat drive, amount, comp gain, lim gain
             'DryWet': ('Macro 7',),
+            'Compressor': ('Macro 6', 'Macro 4', 'Macro 5'), # gain, freq, threshold
+            'Limiter': ('Macro 8',),
             'Banks': GRP4_BANKS}
 
 RACK_DEVICE_DICT = {
