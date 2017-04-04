@@ -79,7 +79,7 @@ class TrackFilterComponent(ControlSurfaceComponent):
 
     def update(self):
         super(TrackFilterComponent, self).update()
-         if self.is_enabled() and self._device is not None:
+        if self.is_enabled() and self._device is not None:
             device_dict = FILTER_DEVICES[self._device.class_name]
             if self._freq_control is not None:
                 self._freq_control.release_parameter()
