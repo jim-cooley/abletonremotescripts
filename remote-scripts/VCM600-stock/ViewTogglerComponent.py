@@ -1,10 +1,7 @@
-# Embedded file name: /Users/versonator/Jenkins/live/Binary/Core_Release_32_static/midi-remote-scripts/VCM600/ViewTogglerComponent.py
+#Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/python-bundle/MIDI Remote Scripts/VCM600/ViewTogglerComponent.py
 import Live
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.ButtonElement import ButtonElement
-
-from logly import *
-
 
 class ViewTogglerComponent(ControlSurfaceComponent):
     """ Component that can toggle the device chain- and clip view of a number of tracks """
@@ -22,46 +19,46 @@ class ViewTogglerComponent(ControlSurfaceComponent):
     def disconnect(self):
         self.application().view.remove_is_view_visible_listener('Detail', self._on_detail_view_changed)
         self.application().view.remove_is_view_visible_listener('Detail/Clip', self._on_views_changed)
-        if self._chain_buttons is not None:
+        if self._chain_buttons != None:
             for button in self._chain_buttons:
                 button.remove_value_listener(self._chain_value)
-# note, this line removed in local version
+
             self._chain_buttons = None
-        if self._clip_buttons is not None:
+        if self._clip_buttons != None:
             for button in self._clip_buttons:
                 button.remove_value_listener(self._clip_value)
+
             self._clip_buttons = None
-        return
 
     def set_buttons(self, chain_buttons, clip_buttons):
-        assert (chain_buttons is None or (isinstance(chain_buttons, tuple) and len(chain_buttons) == self._num_tracks))
-        assert (clip_buttons is None or (isinstance(clip_buttons, tuple) and len(clip_buttons) == self._num_tracks))
-        if self._chain_buttons is not None:
+        raise chain_buttons == None or isinstance(chain_buttons, tuple) and len(chain_buttons) == self._num_tracks or AssertionError
+        raise clip_buttons == None or isinstance(clip_buttons, tuple) and len(clip_buttons) == self._num_tracks or AssertionError
+        if self._chain_buttons != None:
             for button in self._chain_buttons:
                 button.remove_value_listener(self._chain_value)
+
         self._chain_buttons = chain_buttons
-        if self._chain_buttons is not None:
+        if self._chain_buttons != None:
             for button in self._chain_buttons:
-                assert isinstance(button, ButtonElement)
+                raise isinstance(button, ButtonElement) or AssertionError
                 button.add_value_listener(self._chain_value, identify_sender=True)
 
-        if self._clip_buttons is not None:
+        if self._clip_buttons != None:
             for button in self._clip_buttons:
                 button.remove_value_listener(self._clip_value)
+
         self._clip_buttons = clip_buttons
-        if self._clip_buttons is not None:
+        if self._clip_buttons != None:
             for button in self._clip_buttons:
-                assert isinstance(button, ButtonElement)
+                raise isinstance(button, ButtonElement) or AssertionError
                 button.add_value_listener(self._clip_value, identify_sender=True)
+
         self.on_selected_track_changed()
-        return
 
     def on_selected_track_changed(self):
-        logly_message("VCM: View got track selection change")
         self._update_buttons()
 
     def on_enabled_changed(self):
-        logly_message("VCM: View got enabled changed")
         self.update()
 
     def update(self):
@@ -69,13 +66,13 @@ class ViewTogglerComponent(ControlSurfaceComponent):
         if self.is_enabled():
             self._update_buttons()
         else:
-            if self._chain_buttons is not None:
+            if self._chain_buttons != None:
                 for button in self._chain_buttons:
                     button.turn_off()
-            if self._clip_buttons is not None:
+
+            if self._clip_buttons != None:
                 for button in self._clip_buttons:
                     button.turn_off()
-        return
 
     def _on_detail_view_changed(self):
         self._update_buttons()
@@ -96,14 +93,13 @@ class ViewTogglerComponent(ControlSurfaceComponent):
                 else:
                     self._clip_buttons[index].turn_off()
             else:
-                if self._chain_buttons is not None:
+                if self._chain_buttons != None:
                     self._chain_buttons[index].turn_off()
-                if self._clip_buttons is not None:
+                if self._clip_buttons != None:
                     self._clip_buttons[index].turn_off()
-        return
 
     def _chain_value(self, value, sender):
-        assert sender in self._chain_buttons
+        raise sender in self._chain_buttons or AssertionError
         tracks = self.song().visible_tracks
         if not sender.is_momentary() or value != 0:
             index = list(self._chain_buttons).index(sender)
@@ -122,7 +118,7 @@ class ViewTogglerComponent(ControlSurfaceComponent):
             self._ignore_track_selection = False
 
     def _clip_value(self, value, sender):
-        assert sender in self._clip_buttons
+        raise sender in self._clip_buttons or AssertionError
         tracks = self.song().visible_tracks
         if not sender.is_momentary() or value != 0:
             index = list(self._clip_buttons).index(sender)

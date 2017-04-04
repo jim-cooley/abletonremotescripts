@@ -42,20 +42,18 @@ class TrackFilterComponent(ControlSurfaceComponent):
         self._device = None
         self._freq_control = None
         self._reso_control = None
-        return
 
     def disconnect(self):
-        if self._freq_control is not None:
+        if self._freq_control != None:
             self._freq_control.release_parameter()
             self._freq_control = None
-        if self._reso_control is not None:
+        if self._reso_control != None:
             self._reso_control.release_parameter()
             self._reso_control = None
-        if self._track is not None:
+        if self._track != None:
             self._track.remove_devices_listener(self._on_devices_changed)
             self._track = None
         self._device = None
-        return
 
     def on_enabled_changed(self):
         logly_message("VCM: Filter got enabled changed")
@@ -75,7 +73,6 @@ class TrackFilterComponent(ControlSurfaceComponent):
         if self._track is not None:
             self._track.add_devices_listener(self._on_devices_changed)
             self._on_devices_changed()
-        return
 
     def set_filter_controls(self, freq, reso):
         assert isinstance(freq, EncoderElement)
@@ -86,7 +83,6 @@ class TrackFilterComponent(ControlSurfaceComponent):
         self._freq_control = freq
         self._reso_control = reso
         self.update()
-        return
 
     def update(self):
         super(TrackFilterComponent, self).update()
@@ -109,13 +105,12 @@ class TrackFilterComponent(ControlSurfaceComponent):
                     if parameter is not None:
                         logly_message("VCM: Filter connecting 'Resonance' knob to %s" % parameter.original_name)
                         self._reso_control.connect_to(parameter)
-        return
 
     def _on_devices_changed(self):
         logly_message("VCM: Filter got on device changed")
         logly_message("%s" % FILTER_DEVICES)
         self._device = None
-        if self._track is not None:
+        if self._track != None:
             for index in range(len(self._track.devices)):
                 device = self._track.devices[-1 * (index + 1)]
                 logly_message("VCM: Filter found " + device.class_name)
@@ -123,4 +118,3 @@ class TrackFilterComponent(ControlSurfaceComponent):
                     self._device = device
                     break
         self.update()
-        return

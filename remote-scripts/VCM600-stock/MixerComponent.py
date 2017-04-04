@@ -1,11 +1,7 @@
-# Embedded file name: /Users/versonator/Jenkins/live/Binary/Core_Release_32_static/midi-remote-scripts/VCM600/MixerComponent.py
+#Embedded file name: /Users/versonator/Jenkins/live/output/mac_64_static/Release/python-bundle/MIDI Remote Scripts/VCM600/MixerComponent.py
 from _Framework.MixerComponent import MixerComponent as MixerComponentBase
 from .TrackEQComponent import TrackEQComponent
 from .TrackFilterComponent import TrackFilterComponent
-
-from logly import *
-from utils import *
-
 
 class MixerComponent(MixerComponentBase):
 
@@ -25,15 +21,7 @@ class MixerComponent(MixerComponentBase):
         return self._track_filters[index]
 
     def _reassign_tracks(self):
-        logly_message("VCM: Mixer received reassign tracks.")
-        for index in range(len(self._channel_strips)):
-            if len(self._track_eqs) > index:
-                self._track_eqs[index].set_track(None)
-            if len(self._track_filters) > index:
-                self._track_filters[index].set_track(None)
-
         super(MixerComponent, self)._reassign_tracks()
-
         tracks = self.tracks_to_use()
         for index in range(len(self._channel_strips)):
             track_index = self._track_offset + index
@@ -42,10 +30,3 @@ class MixerComponent(MixerComponentBase):
                 self._track_eqs[index].set_track(track)
             if len(self._track_filters) > index:
                 self._track_filters[index].set_track(track)
-        return
-
-    def on_selected_track_changed(self):
-        logly_message("VCM: Mixer received selected track change.")
-        selected_track = self.song().view.selected_track
-        print_track_info(selected_track)
-        MixerComponentBase.on_selected_track_changed(self)
