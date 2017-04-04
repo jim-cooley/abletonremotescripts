@@ -61,3 +61,8 @@ The best sources I've found for information on programming Ableton Live (tm) Rem
 
 # User Remote Scripts Location (& instructions):
 * <drive> ▸ Users ▸ <user name> ▸ Library ▸ Preferences ▸ Ableton ▸ Live 9.1.6 ▸ User Remote Scripts
+
+# Note on the source code:
+* branches -- work in progress (merges from non-branching scm)
+* samples -- stock, sample devices
+* versions -- completed devices in use.
