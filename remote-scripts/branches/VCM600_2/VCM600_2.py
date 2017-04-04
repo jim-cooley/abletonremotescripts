@@ -16,11 +16,11 @@ from _Framework.ChannelTranslationSelector import ChannelTranslationSelector
 
 from consts import *
 from ViewTogglerComponent import ViewTogglerComponent
-from MixerComponent import SpecialMixerComponent
+from SpecialMixerComponent import SpecialMixerComponent
 from logly import *
 
 
-class VCM600(ControlSurface):
+class VCM600_2(ControlSurface):
     """ Script for Vestax's VCM600 Controller """
 
     def __init__(self, c_instance):
@@ -34,7 +34,7 @@ class VCM600(ControlSurface):
             self._setup_view_control()
         self._set_suppress_rebuild_requests(False)
         logly_set_logger(self)
-        logly_message("VCM600 loaded.")
+        logly_message("VCM600.2 loaded.")
 
 # General Operation:
 
