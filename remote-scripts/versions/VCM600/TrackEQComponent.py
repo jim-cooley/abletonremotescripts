@@ -45,42 +45,37 @@ class TrackEQComponent(ControlSurfaceComponent):
         self.update()
 
     def set_track(self, track):
-        if not (track == None or isinstance(track, Live.Track.Track)):
-            raise AssertionError
-            if self._track != None:
-                self._track.remove_devices_listener(self._on_devices_changed)
-                if self._gain_controls != None and self._device != None:
-                    for control in self._gain_controls:
-                        control.release_parameter()
-
-            self._track = track
-            self._track != None and self._track.add_devices_listener(self._on_devices_changed)
+        assert (track is None) or isinstance(track, Live.Track.Track)
+        if self._track != None:
+            self._track.remove_devices_listener(self._on_devices_changed)
+            if self._gain_controls != None and self._device != None:
+                for control in self._gain_controls:
+                    control.release_parameter()
+        self._track = track
+        if self._track != None:
+            self._track.add_devices_listener(self._on_devices_changed)
         self._on_devices_changed()
 
     def set_cut_buttons(self, buttons):
-        if not (buttons == None or isinstance(buttons, tuple)):
-            raise AssertionError
-            if buttons != self._cut_buttons and self._cut_buttons != None:
-                for button in self._cut_buttons:
-                    button.remove_value_listener(self._cut_value)
-
-            self._cut_buttons = buttons
-            if self._cut_buttons != None:
-                for button in self._cut_buttons:
-                    button.add_value_listener(self._cut_value, identify_sender=True)
-
-            self.update()
+        assert (buttons is None) or isinstance(buttons, tuple)
+        if buttons != self._cut_buttons and self._cut_buttons != None:
+            for button in self._cut_buttons:
+                button.remove_value_listener(self._cut_value)
+        self._cut_buttons = buttons
+        if self._cut_buttons != None:
+            for button in self._cut_buttons:
+                button.add_value_listener(self._cut_value, identify_sender=True)
+        self.update()
 
     def set_gain_controls(self, controls):
-        raise controls != None or AssertionError
-        raise isinstance(controls, tuple) or AssertionError
+        assert controls != None
+        assert isinstance(controls, tuple)
         if self._device != None and self._gain_controls != None:
             for control in self._gain_controls:
                 control.release_parameter()
 
         for control in controls:
-            raise control != None or AssertionError
-            raise isinstance(control, EncoderElement) or AssertionError
+            assert (control is not None) and isinstance(control, EncoderElement)
 
         self._gain_controls = controls
         self.update()
@@ -122,17 +117,16 @@ class TrackEQComponent(ControlSurfaceComponent):
 
     def _cut_value(self, value, sender):
         if not sender in self._cut_buttons:
-            raise AssertionError
-            if not value in range(128):
-                raise AssertionError
-                if self.is_enabled() and self._device != None:
-                    if not sender.is_momentary() or value is not 0:
-                        device_dict = EQ_DEVICES[self._device.class_name]
-                        if 'Cuts' in device_dict.keys():
-                            cut_names = device_dict['Cuts']
-                            index = list(self._cut_buttons).index(sender)
-                            parameter = index in range(len(cut_names)) and get_parameter_by_name(self._device, cut_names[index])
-                            parameter.value = parameter != None and parameter.is_enabled and float(int(parameter.value + 1) % 2)
+            assert sender in self._cut_buttons
+            assert value in range(128)
+            if self.is_enabled() and self._device != None:
+                if not sender.is_momentary() or value is not 0:
+                    device_dict = EQ_DEVICES[self._device.class_name]
+                    if 'Cuts' in device_dict.keys():
+                        cut_names = device_dict['Cuts']
+                        index = list(self._cut_buttons).index(sender)
+                        parameter = index in range(len(cut_names)) and get_parameter_by_name(self._device, cut_names[index])
+                        parameter.value = parameter != None and parameter.is_enabled and float(int(parameter.value + 1) % 2)
 
     def _on_devices_changed(self):
         if self._device != None:
@@ -155,13 +149,12 @@ class TrackEQComponent(ControlSurfaceComponent):
         self.update()
 
     def _on_cut_changed(self):
-        if not self._device != None:
-            raise AssertionError
-            raise 'Cuts' in EQ_DEVICES[self._device.class_name].keys() or AssertionError
-            cut_names = self.is_enabled() and self._cut_buttons != None and EQ_DEVICES[self._device.class_name]['Cuts']
-            for index in range(len(self._cut_buttons)):
-                self._cut_buttons[index].turn_off()
-                if len(cut_names) > index:
-                    parameter = get_parameter_by_name(self._device, cut_names[index])
-                    if parameter != None and parameter.value == 0.0:
-                        self._cut_buttons[index].turn_on()
+        assert self._device is not None
+        assert 'Cuts' in EQ_DEVICES[self._device.class_name].keys()
+        cut_names = self.is_enabled() and self._cut_buttons != None and EQ_DEVICES[self._device.class_name]['Cuts']
+        for index in range(len(self._cut_buttons)):
+            self._cut_buttons[index].turn_off()
+            if len(cut_names) > index:
+                parameter = get_parameter_by_name(self._device, cut_names[index])
+                if parameter != None and parameter.value == 0.0:
+                    self._cut_buttons[index].turn_on()

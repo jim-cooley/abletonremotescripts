@@ -28,6 +28,7 @@ class VCM600(ControlSurface):
             self._setup_device_control()
             self._setup_transport_control()
             self._setup_view_control()
+        self.log_message("VCM600 MIDI RemoteScript loaded.")
 
     def _setup_session_control(self):
         is_momentary = True
