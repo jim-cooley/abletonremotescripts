@@ -1,5 +1,6 @@
 # Embedded file name: /Users/versonator/Jenkins/live/Binary/Core_Release_32_static/midi-remote-scripts/VCM600/VCM600.py
 from __future__ import with_statement
+
 import Live
 from _Framework.ControlSurface import ControlSurface
 from _Framework.InputControlElement import *
@@ -15,13 +16,20 @@ from _Framework.SessionComponent import SessionComponent
 from _Framework.ChannelTranslationSelector import ChannelTranslationSelector
 from ViewTogglerComponent import ViewTogglerComponent
 from MixerComponent import MixerComponent
+
+import logging
+import LogFacility as LOG
+from consts import *
+
 NUM_TRACKS = 12
+
 
 class VCM600_Custom(ControlSurface):
     """ Script for Vestax's VCM600 Controller """
 
     def __init__(self, c_instance):
         ControlSurface.__init__(self, c_instance)
+        self._init_logging()
         with self.component_guard():
             self._setup_session_control()
             self._setup_mixer_control()
@@ -30,25 +38,32 @@ class VCM600_Custom(ControlSurface):
             self._setup_view_control()
         self.log_message("VCM600 Custom Script loaded.")
 
+    def _init_logging(self):
+        LOG.init('vcm600-custom.log')
+        LOG.setLevel(logging.DEBUG)
+        LOG.message('custom logging initialized')
+
     def _setup_session_control(self):
             is_momentary = True
-            down_button = ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 89)
-            up_button = ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 90)
+            down_button = ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, SCENE_WHEEL_DOWN)
+            up_button = ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, SCENE_WHEEL_UP)
             session = SessionComponent(NUM_TRACKS, 0)
             session.set_select_buttons(down_button, up_button)
-            session.selected_scene().set_launch_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 87))
-            track_stop_buttons = [ ButtonElement(is_momentary, MIDI_NOTE_TYPE, index, 68) for index in range(NUM_TRACKS) ]
-            session.set_stop_track_clip_buttons(tuple(track_stop_buttons))
+            session.selected_scene().set_launch_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, SCENE_WHEEL_CLICK))
+            clip_stop_buttons = [ ButtonElement(is_momentary, MIDI_NOTE_TYPE, index, TRACK_CLIP_STOP) for index in range(NUM_TRACKS) ]
+            session.set_stop_track_clip_buttons(tuple(clip_stop_buttons))
+            clip_start_buttons = [ ButtonElement(is_momentary, MIDI_NOTE_TYPE, index, TRACK_CLIP_START) for index in range(NUM_TRACKS) ]
+
             for index in range(NUM_TRACKS):
-                session.selected_scene().clip_slot(index).set_launch_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, index, 69))
+                session.selected_scene().clip_slot(index).set_launch_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, index, TRACK_CLIP_START))
 
     def _setup_device_control(self):
         is_momentary = True
         device_bank_buttons = []
         device_param_controls = []
         for index in range(8):
-            device_bank_buttons.append(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 70 + index))
-            device_param_controls.append(EncoderElement(MIDI_CC_TYPE, 12, 12 + index, Live.MidiMap.MapMode.absolute))
+            device_bank_buttons.append(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 70 + index))
+            device_param_controls.append(EncoderElement(MIDI_CC_TYPE, VCM_CHANNEL, 12 + index, Live.MidiMap.MapMode.absolute))
 
         device = DeviceComponent()
         device.set_bank_buttons(tuple(device_bank_buttons))
@@ -79,7 +94,7 @@ class VCM600_Custom(ControlSurface):
             strip = mixer.return_strip(ret_track)
             strip.set_volume_control(SliderElement(MIDI_CC_TYPE, 12, 22 + ret_track))
             strip.set_pan_control(EncoderElement(MIDI_CC_TYPE, 12, 20 + ret_track, Live.MidiMap.MapMode.absolute))
-            strip.set_mute_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 78 + ret_track))
+            strip.set_mute_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 78 + ret_track))
 
         mixer.set_crossfader_control(SliderElement(MIDI_CC_TYPE, 12, 8))
         mixer.set_prehear_volume_control(EncoderElement(MIDI_CC_TYPE, 12, 24, Live.MidiMap.MapMode.absolute))
@@ -90,11 +105,11 @@ class VCM600_Custom(ControlSurface):
     def _setup_transport_control(self):
         is_momentary = True
         transport = TransportComponent()
-        transport.set_play_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 80))
-        transport.set_record_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 81))
-        transport.set_nudge_buttons(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 86), ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 85))
-        transport.set_loop_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 84))
-        transport.set_punch_buttons(ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 82), ButtonElement(is_momentary, MIDI_NOTE_TYPE, 12, 83))
+        transport.set_play_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 80))
+        transport.set_record_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 81))
+        transport.set_nudge_buttons(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 86), ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 85))
+        transport.set_loop_button(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 84))
+        transport.set_punch_buttons(ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 82), ButtonElement(is_momentary, MIDI_NOTE_TYPE, VCM_CHANNEL, 83))
         transport.set_tempo_control(SliderElement(MIDI_CC_TYPE, 12, 26), SliderElement(MIDI_CC_TYPE, 12, 25))
 
     def _setup_view_control(self):

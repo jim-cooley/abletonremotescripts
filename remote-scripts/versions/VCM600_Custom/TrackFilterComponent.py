@@ -3,28 +3,11 @@ import Live
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.EncoderElement import EncoderElement
 from _Generic.Devices import get_parameter_by_name
-FILTER_DEVICES = {'AutoFilter': {'Frequency': 'Frequency',
-                'Resonance': 'Resonance'},
-'Chorus': {'Frequency': 'Feedback',
-           'Resonance': 'Dry/Wet'},
-'CrossDelay': {'Frequency': 'Feedback',
-              'Resonance': 'Dry/Wet'},
-'FilterDelay': {'Frequency': '2 Filter Freq',
-             'Resonance': 'Dry'},
- 'Operator': {'Frequency': 'Filter Freq',
-              'Resonance': 'Filter Res'},
- 'OriginalSimpler': {'Frequency': 'Filter Freq',
-                     'Resonance': 'Filter Res'},
- 'PingPongDelay': {'Frequency': 'Feedback',
-                   'Resonance': 'Dry/Wet'},
- 'MultiSampler': {'Frequency': 'Filter Freq',
-                  'Resonance': 'Filter Res'},
- 'Reverb': {'Frequency': 'DecayTime',
-            'Resonance': 'Dry/Wet'},
- 'UltraAnalog': {'Frequency': 'F1 Freq',
-                 'Resonance': 'F1 Resonance'},
- 'StringStudio': {'Frequency': 'Filter Freq',
-                  'Resonance': 'Filter Reso'}}
+
+import LogFacility as LOG
+
+import devices
+
 
 class TrackFilterComponent(ControlSurfaceComponent):
     """ Class representing a track's filter, attaches to the last filter in the track """
